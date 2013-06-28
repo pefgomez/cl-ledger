@@ -13,6 +13,9 @@
 (defvar *registered-parsers* nil)
 (defvar *allow-embedded-lisp* nil)
 
+;; overrides some periods' global variables
+(setf periods:*output-time-format* "%Y-%m-%d")
+
 ;;;_ * Binders
 
 (defvar *last-binder* nil)
