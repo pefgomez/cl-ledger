@@ -1,10 +1,11 @@
 ;; register.lisp
 
-(declaim (optimize (safety 3) (debug 3) (speed 1) (space 0)))
+#-:debug-cl-ledger(declaim (optimize (safety 3) (speed 1) (space 0) (debug 0)))
+#+:debug-cl-ledger(declaim (optimize (safety 0) (speed 0) (space 0) (debug 3) (compilation-speed 0)))
 
 (in-package :ledger)
 
-(declaim (inline value-expr-call))
+#-:debug-cl-ledger(declaim (inline value-expr-call))
 (defun value-expr-call (valexpr xact)
   (declare (type value-expr valexpr))
   (declare (type transaction xact))
@@ -33,12 +34,12 @@
 		#\" #\@ #\;))
   (set-macro-character char #'ignore-character nil *value-expr-readtable*))
 
-(declaim (inline apply-this-or-last))
+#-:debug-cl-ledger(declaim (inline apply-this-or-last))
 (defun apply-this-or-last (function)
   (lambda (xact &optional apply-to-xact)
     (funcall function (or apply-to-xact xact))))
 
-(declaim (inline ignore-xact))
+#-:debug-cl-ledger(declaim (inline ignore-xact))
 (defun ignore-xact (function)
   (lambda (xact &rest args)
     (declare (ignore xact))

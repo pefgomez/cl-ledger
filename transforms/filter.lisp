@@ -1,6 +1,7 @@
 ;; filter.lisp
 
-(declaim (optimize (safety 3) (debug 3) (speed 1) (space 0)))
+#-:debug-cl-ledger(declaim (optimize (safety 3) (speed 1) (space 0) (debug 0)))
+#+:debug-cl-ledger(declaim (optimize (safety 0) (speed 0) (space 0) (debug 3) (compilation-speed 0)))
 
 (in-package :ledger)
 
@@ -175,14 +176,14 @@
 	     (unless (funcall predicate xact)
 	       (return nil)))))))
 
-(declaim (inline apply-filter))
+#-:debug-cl-ledger(declaim (inline apply-filter))
 (defun apply-filter (xact-series &rest args)
   (let ((predicate (parse-predicate-keywords args)))
     (if predicate
 	(choose-if predicate xact-series)
 	xact-series)))
 
-(declaim (inline choose-if-value-expr))
+#-:debug-cl-ledger(declaim (inline choose-if-value-expr))
 (defun choose-if-value-expr (xact-series expr)
   (choose-if (if (functionp expr) expr
 		 (value-expr-function (parse-value-expr expr)))

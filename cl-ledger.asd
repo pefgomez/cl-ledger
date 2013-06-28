@@ -45,6 +45,11 @@ for diagnostic output.")
 (pushnew :periods-use-series *features*)
 (pushnew :periods-use-parser *features*)
 
+(pushnew :debug-fprog     *features*)
+(pushnew :debug-cambl     *features*)
+(pushnew :debug-periods   *features*)
+(pushnew :debug-cl-ledger *features*)
+
 (asdf:defsystem :cl-ledger
   :serial t
   :version #.*cl-ledger-version*

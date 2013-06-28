@@ -1,6 +1,7 @@
 ;; This file contains the parser for textual ledger files
 
-(declaim (optimize (safety 3) (debug 3) (speed 1) (space 0)))
+#-:debug-cl-ledger(declaim (optimize (safety 3) (speed 1) (space 0) (debug 0)))
+#+:debug-cl-ledger(declaim (optimize (safety 0) (speed 0) (space 0) (debug 3) (compilation-speed 0)))
 
 (defpackage :ledger-textual
   (:use :common-lisp :ledger :local-time :periods :cambl :cl-ppcre)
@@ -204,15 +205,15 @@
 
 (defun read-plain-entry (in line journal)
   "Read in the header line for the entry, which has the syntax:
-  
+
     (DATE(=DATE)?)( (*|!))?( (\((.+?)\)))? (.+)(:spacer:;(.+))?
-  
+
   :spacer: means: two spaces, a tab, or a space and a tab, followed by any
   amount of whitespace.
-  
+
   The groups identified in this regular expression (found in the scanner
   *entry-heading-scanner*) have these meanings:
-  
+
   1 - The actual date of the entry.
   2 - The (optional) effective date of the entry.
   4 - The (optional) status of the entry: *=cleared, !=pending.
@@ -311,7 +312,7 @@
 ;;   push_var<unsigned long> save_beg_pos(beg_pos);
 ;;   push_var<unsigned long> save_end_pos(end_pos);
 ;;   push_var<unsigned int>  save_linenum(linenum);
-;; 
+;;
 ;;   path = p;
 ;;   if (path[0] != '/' && path[0] != '\\' && path[0] != '~') {
 ;;     std::string::size_type pos = save_path.prev.rfind('/');
@@ -321,10 +322,10 @@
 ;;       path = std::string(save_path.prev, 0, pos + 1) + path;
 ;;   }
 ;;   path = resolve_path(path);
-;; 
+;;
 ;;   DEBUG_PRINT("ledger-textual.include", "line " << linenum << ": " <<
 ;; 	      "Including path '" << path << "'");
-;; 
+;;
 ;;   include_stack.push_back(std::pair<std::string, int>
 ;; 			  (journal->sources.back(), linenum - 1));
 ;;   count += parse_journal_file(path, config, journal,
@@ -347,7 +348,7 @@
 ;;       *z-- = '\0';
 ;;     *e++ = '\0';
 ;;     e = skip_ws(e);
-;; 
+;;
 ;;     // Once we have an alias name (b) and the target account
 ;;     // name (e), add a reference to the account in the
 ;;     // `account_aliases' map, which is used by the transaction

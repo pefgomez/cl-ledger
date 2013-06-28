@@ -1,6 +1,7 @@
 ;; types.lisp
 
-(declaim (optimize (safety 3) (debug 3) (speed 1) (space 0)))
+#-:debug-cl-ledger(declaim (optimize (safety 3) (speed 1) (space 0) (debug 0)))
+#+:debug-cl-ledger(declaim (optimize (safety 0) (speed 0) (space 0) (debug 3) (compilation-speed 0)))
 
 (in-package :ledger)
 
@@ -97,7 +98,7 @@
    (data           :accessor binder-data           :initarg :data
 		   :initform nil)))
 
-(declaim (inline binderp))
+#-:debug-cl-ledger(declaim (inline binderp))
 (defun binderp (binder)
   (typep binder 'binder))
 

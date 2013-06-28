@@ -1,6 +1,7 @@
 ;; general.lisp
 
-(declaim (optimize (safety 3) (debug 3) (speed 1) (space 0)))
+#-:debug-cl-ledger(declaim (optimize (safety 3) (speed 1) (space 0) (debug 0)))
+#+:debug-cl-ledger(declaim (optimize (safety 0) (speed 0) (space 0) (debug 3) (compilation-speed 0)))
 
 (in-package :ledger)
 
@@ -36,23 +37,23 @@ if there were an empty string between them."
   `(do () ((not ,test-form))
      ,@body))
 
-(declaim (inline ignore-args))
+#-:debug-cl-ledger(declaim (inline ignore-args))
 (defun ignore-args (function)
   (lambda (&rest args)
     (declare (ignore args))
     (funcall function)))
 
-(declaim (inline ignore-rest))
+#-:debug-cl-ledger(declaim (inline ignore-rest))
 (defun ignore-rest (function)
   (lambda (arg &rest args)
     (declare (ignore args))
     (funcall function arg)))
 
-(declaim (inline list-iterator))
+#-:debug-cl-ledger(declaim (inline list-iterator))
 (defun list-iterator (list)
   (lambda () (pop list)))
 
-(declaim (inline map-iterator))
+#-:debug-cl-ledger(declaim (inline map-iterator))
 (defun map-iterator (callable iterator)
   ;; This makes the assumption that iterator returns NIL when it reaches the
   ;; end.

@@ -1,6 +1,7 @@
 ;; ledger.lisp
 
-(declaim (optimize (safety 3) (debug 3) (speed 1) (space 0)))
+#-:debug-cl-ledger(declaim (optimize (safety 3) (speed 1) (space 0) (debug 0)))
+#+:debug-cl-ledger(declaim (optimize (safety 0) (speed 0) (space 0) (debug 3) (compilation-speed 0)))
 
 (in-package :ledger)
 
@@ -178,13 +179,13 @@ The result is of type JOURNAL."
   (pushend child (journal-contents journal)
 	   (journal-last-content-cell journal)))
 
-(declaim (inline add-to-contents))
+#-:debug-cl-ledger(declaim (inline add-to-contents))
 (defun add-to-contents (journal item)
   (declare (type journal journal))
   (pushend item (journal-contents journal)
 	   (journal-last-content-cell journal)))
 
-(declaim (inline parse-journal-date))
+#-:debug-cl-ledger(declaim (inline parse-journal-date))
 (defun parse-journal-date (journal string)
   (strptime string :format (or (journal-date-format journal)
 			       *input-time-format*)
@@ -192,12 +193,12 @@ The result is of type JOURNAL."
 
 ;;;_ * Accounts
 
-(declaim (inline account-value))
+#-:debug-cl-ledger(declaim (inline account-value))
 (defun account-value (account key)
   (let ((value-cell (assoc key (account-data account))))
     (values (cdr value-cell) value-cell)))
 
-(declaim (inline account-value))
+#-:debug-cl-ledger(declaim (inline account-value))
 (defun account-set-value (account key value)
   (let ((value-cell (assoc key (account-data account))))
     (if value-cell
@@ -341,9 +342,9 @@ The result is of type JOURNAL."
      (map-entries #'(lambda (,var) ,@body) ,object)
      ,result))
 
-(declaim (inline scan-entries))
+#-:debug-cl-ledger(declaim (inline scan-entries))
 (defun scan-entries (object)
-  (declare (optimizable-series-function))
+  #-:debug-cl-ledger(declare (optimizable-series-function))
   (multiple-value-bind (entries)
       (map-fn '(or entry null) (entries-iterator object))
     (until-if #'null entries)))
@@ -403,9 +404,9 @@ The result is of type JOURNAL."
 	for ,var = (funcall ,iterator) while ,var do
 	  (progn ,@body ,result))))
 
-(declaim (inline scan-transactions))
+#-:debug-cl-ledger(declaim (inline scan-transactions))
 (defun scan-transactions (object &optional entry-transform)
-  (declare (optimizable-series-function))
+  #-:debug-cl-ledger(declare (optimizable-series-function))
   (multiple-value-bind (transactions)
       (map-fn '(or transaction null)
 	      (transactions-iterator object entry-transform))
