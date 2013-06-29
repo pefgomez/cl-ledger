@@ -34,9 +34,13 @@
 	    (format output-stream "~%")
 	    (format output-stream "~&"))
 
-	(format output-stream "~A ~A~%"
-		(strftime (entry-date (xact-entry xact)))
-		(entry-payee (xact-entry xact)))
+        (format output-stream "~A~@[=~A~] ~A~%"
+                (strftime (entry-date (xact-entry xact)))
+                (when (and (entry-alternate-date (xact-entry xact))
+                           (not (equal (entry-date (xact-entry xact))
+                                       (entry-alternate-date (xact-entry xact)))))
+                  (strftime (entry-alternate-date (xact-entry xact))))
+                (entry-payee (xact-entry xact)))
 	(setf last-entry (xact-entry xact)))
 
       ;; Then display the transaction details; if this is an unnormalized,

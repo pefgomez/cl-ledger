@@ -290,6 +290,12 @@ The result is of type JOURNAL."
 	  (entry-actual-date entry))
       (entry-actual-date entry)))
 
+(defun entry-alternate-date (entry)
+  (declare (type entry entry))
+  (if *use-effective-dates*
+      (entry-actual-date entry)
+      (entry-effective-date entry)))
+
 ;;;_ * Code to walk the LEDGER object tree
 
 (defmethod entries-iterator ((binder binder))
